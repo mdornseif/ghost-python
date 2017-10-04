@@ -60,7 +60,11 @@ class Ghost:
             return 401, {"errors" : [{"errorType" : "Unauthorized", "message" : "Call authenticate method first"}]}
 
         url = urljoin(self.base_url, self.POST_URL)
-        post = {'title' : title, 'status' : status, 'markdown' : text}
+        mobiledoc = {
+            "version":"0.3.1", "atoms":[], "sections":[[10,0]], "markups":[],
+            "cards":[["card-markdown",{"cardName":"card-markdown","markdown":text}]]
+            }
+        post = {'title' : title, 'status' : status, 'mobiledoc' : json.dumps(mobiledoc)}
         payload = {'posts' : [post]}
         headers = {'Authorization' : self.auth_header}
         r = requests.post(url, headers=headers, json=payload)
@@ -91,7 +95,11 @@ class Ghost:
             return 400, {"errors" : [{"errorType" : "Bad request", "message" : "article_id is None"}]}
 
         url = urljoin(self.base_url, self.ARTICLE_URL.format(article_id))
-        post = {'title' : title, 'status' : status, 'markdown' : text}
+        mobiledoc = {
+            "version":"0.3.1", "atoms":[], "sections":[[10,0]], "markups":[],
+            "cards":[["card-markdown",{"cardName":"card-markdown","markdown":text}]]
+            }
+        post = {'title' : title, 'status' : status, 'mobiledoc' : json.dumps(mobiledoc)}
         payload = {'posts' : [post]}
         headers = {'Authorization' : self.auth_header}
         r = requests.put(url, headers=headers, json=payload)
